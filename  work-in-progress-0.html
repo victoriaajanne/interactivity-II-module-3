@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIP0</title>
+  <link rel="stylesheet" href="styles.css">
+   <link rel="javaesheet" href="script.js">
+
+</head>
+<body>
+
+  <h1>Hey Diddle Diddle</h1>
+  <p>Poem by Mother Goose, Page by Victoria McPherson</p>
+
+  <div class="container">
+    <button id="button1" class="poem-btn" onclick="revealNext('button2', this)">Hey Diddle Diddle — the cat and the fiddle</button>
+
+    <button id="button2" class="poem-btn hidden" onclick="revealNext('button3', this)">The cow jumped over the moon</button>
+
+    <button id="button3" class="poem-btn hidden" onclick="revealNext('text1', this)">The little dog laughed to see such sport</button>
+
+    <textarea id="text1" class="hidden" rows="4" cols="40">And the dish ran away with the spoon</textarea>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
