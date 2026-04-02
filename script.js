@@ -20,3 +20,22 @@ function revealNext(nextId, clickedButton) {
 
   document.body.appendChild(newBtn);
 }
+
+// Example 1: Alert
+const button = document.getElementById("myButton");
+
+button.addEventListener("click", handleClick);
+
+function handleClick() {
+  alert("Button was clicked!");
+}
+
+// Example 2: Change Text
+const clickButton = document.getElementById("clickButton");
+const message = document.getElementById("message");
+
+clickButton.addEventListener("click", showMessage);
+
+function showMessage() {
+  message.textContent = "Button was clicked!";
+}
