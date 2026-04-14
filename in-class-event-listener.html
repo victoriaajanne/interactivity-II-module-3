@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Click Exercise</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      transition: background-color 0.3s ease;
+    }
+
+    #message {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <p id="message">Click the button to change the message.</p>
+  <button id="myButton">Click Me</button>
+
+  <script>
+    const button = document.getElementById("myButton");
+    const message = document.getElementById("message");
+
+    button.addEventListener("click", function() {
+      message.textContent = "You clicked the button!";
+      document.body.style.backgroundColor = "lightblue";
+      message.style.textTransform = "uppercase";
+    });
+  </script>
+
+</body>
+</html>

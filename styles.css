@@ -51,4 +51,21 @@ textarea {
   z-index: 10;
 }
 
+-------------
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #fdf6e3;
+}
 
+#poem {
+  margin: 20px;
+  font-size: 20px;
+}
+
+.magicBtn {
+  margin: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+}

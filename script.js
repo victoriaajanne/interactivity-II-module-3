@@ -1,41 +1,109 @@
-let clickCount = 0;
 
-function revealNext(nextId, clickedButton) {
-  const nextEl = document.getElementById(nextId);
-  if (nextEl) {
-    nextEl.classList.remove("hidden");
+
+ --
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const poemLines = [
+    "Hey diddle diddle,",
+    "The cat and the fiddle,",
+    "The cow jumped over the moon;",
+    "The little dog laughed",
+    "To see such sport,",
+    "And the dish ran away with the spoon."
+  ];
+
+  let index = 0;
+
+  const button = document.querySelector(".magicBtn");
+
+  if (!button) {
+    console.log("Button not found");
+    return;
   }
 
-  clickCount++;
+  button.addEventListener("click", handleClick);
 
-  const newBtn = document.createElement("button");
-  newBtn.className = "poem-btn floating";
-  newBtn.textContent = "button " + clickCount;
-  newBtn.style.left = Math.random() * 80 + "vw";
-  newBtn.style.top = Math.random() * 70 + "vh";
-  newBtn.style.backgroundColor = `rgb(${255 - clickCount * 20}, ${200 - clickCount * 10}, 255)`;
-  newBtn.onclick = function () {
-    this.remove();
-  };
+  function handleClick() {
+    const poemDiv = document.getElementById("poem");
 
-  document.body.appendChild(newBtn);
-}
+    if (index < poemLines.length) {
+      const p = document.createElement("p");
+      p.textContent = poemLines[index];
+      poemDiv.appendChild(p);
 
-// Example 1: Alert
-const button = document.getElementById("myButton");
+      triggerChaos(index);
+      index++;
+    }
 
-button.addEventListener("click", handleClick);
+    duplicateButton();
+  }
 
-function handleClick() {
-  alert("Button was clicked!");
-}
+  function duplicateButton() {
+    const newBtn = document.createElement("button");
+    newBtn.textContent = "Click me 🐄";
+    newBtn.classList.add("magicBtn");
 
-// Example 2: Change Text
-const clickButton = document.getElementById("clickButton");
-const message = document.getElementById("message");
+    newBtn.style.position = "absolute";
+    newBtn.style.top = Math.random() * window.innerHeight + "px";
+    newBtn.style.left = Math.random() * window.innerWidth + "px";
 
-clickButton.addEventListener("click", showMessage);
+    newBtn.addEventListener("click", handleClick);
+    document.body.appendChild(newBtn);
+  }
 
-function showMessage() {
-  message.textContent = "Button was clicked!";
-}
+  function triggerChaos(stage) {
+
+    if (stage === 1) {
+      setInterval(() => {
+        document.querySelectorAll(".magicBtn").forEach(btn => {
+          btn.style.transform = `translate(${Math.random()*5}px, ${Math.random()*5}px)`;
+        });
+      }, 300);
+    }
+
+    if (stage === 2) {
+      setInterval(() => {
+        document.querySelectorAll(".magicBtn").forEach(btn => {
+          btn.style.top = Math.random() * window.innerHeight + "px";
+          btn.style.left = Math.random() * window.innerWidth + "px";
+        });
+      }, 800);
+    }
+
+    if (stage === 3) {
+      setInterval(() => {
+        const laugh = document.createElement("p");
+        laugh.textContent = "ha ha ha";
+        laugh.style.position = "absolute";
+        laugh.style.top = Math.random() * window.innerHeight + "px";
+        laugh.style.left = Math.random() * window.innerWidth + "px";
+        document.body.appendChild(laugh);
+      }, 500);
+    }
+
+    if (stage === 4) {
+      setInterval(() => {
+        document.body.style.backgroundColor =
+          `hsl(${Math.random() * 360}, 100%, 80%)`;
+
+        document.body.style.transform =
+          `rotate(${Math.random() * 2 - 1}deg)`;
+      }, 300);
+    }
+
+    if (stage === 5) {
+      document.body.innerHTML = "";
+
+      const finalBtn = document.createElement("button");
+      finalBtn.textContent = "run away";
+      finalBtn.style.fontSize = "30px";
+
+      finalBtn.onclick = () => location.reload();
+
+      document.body.appendChild(finalBtn);
+    }
+  }
+
+});
