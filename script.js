@@ -1,8 +1,3 @@
-
-
- --
-
-
 document.addEventListener("DOMContentLoaded", () => {
 
   const poemLines = [
@@ -15,17 +10,28 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   let index = 0;
+  let canClick = true;
+  let runawayMode = false;
+  let chaosStarted = [];
 
   const button = document.querySelector(".magicBtn");
 
-  if (!button) {
-    console.log("Button not found");
-    return;
-  }
+  // SOUND
+  const clickSound = new Audio("sound effects/click.mp3");
+  const laughSound = new Audio("sound effects/laugh.mp3");
+  const chaosSound = new Audio("sound effects/glitch.wav");
 
   button.addEventListener("click", handleClick);
 
   function handleClick() {
+    if (!canClick) return;
+
+    canClick = false;
+    setTimeout(() => canClick = true, 600);
+
+    clickSound.currentTime = 0;
+    clickSound.play();
+
     const poemDiv = document.getElementById("poem");
 
     if (index < poemLines.length) {
@@ -41,6 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function duplicateButton() {
+    const existingButtons = document.querySelectorAll(".magicBtn");
+    if (existingButtons.length > 10) return;
+
     const newBtn = document.createElement("button");
     newBtn.textContent = "Click me 🐄";
     newBtn.classList.add("magicBtn");
@@ -54,56 +63,114 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function triggerChaos(stage) {
+    if (chaosStarted.includes(stage)) return;
+    chaosStarted.push(stage);
 
     if (stage === 1) {
-      setInterval(() => {
-        document.querySelectorAll(".magicBtn").forEach(btn => {
-          btn.style.transform = `translate(${Math.random()*5}px, ${Math.random()*5}px)`;
-        });
-      }, 300);
+      document.body.style.fontStyle = "italic";
     }
 
     if (stage === 2) {
       setInterval(() => {
         document.querySelectorAll(".magicBtn").forEach(btn => {
           btn.style.top = Math.random() * window.innerHeight + "px";
-          btn.style.left = Math.random() * window.innerWidth + "px";
         });
-      }, 800);
+      }, 1200);
     }
 
     if (stage === 3) {
+      laughSound.loop = true;
+      laughSound.play();
+
       setInterval(() => {
         const laugh = document.createElement("p");
         laugh.textContent = "ha ha ha";
         laugh.style.position = "absolute";
-        laugh.style.top = Math.random() * window.innerHeight + "px";
         laugh.style.left = Math.random() * window.innerWidth + "px";
+        laugh.style.top = Math.random() * window.innerHeight + "px";
         document.body.appendChild(laugh);
-      }, 500);
+      }, 1000);
     }
 
     if (stage === 4) {
-      setInterval(() => {
-        document.body.style.backgroundColor =
-          `hsl(${Math.random() * 360}, 100%, 80%)`;
+      chaosSound.play();
 
-        document.body.style.transform =
-          `rotate(${Math.random() * 2 - 1}deg)`;
-      }, 300);
+      let hue = 0;
+      setInterval(() => {
+        hue += 10;
+        document.body.style.background = `hsl(${hue}, 80%, 80%)`;
+      }, 500);
     }
 
     if (stage === 5) {
+      runawayMode = true;
+
       document.body.innerHTML = "";
 
-      const finalBtn = document.createElement("button");
-      finalBtn.textContent = "run away";
-      finalBtn.style.fontSize = "30px";
+      const ending = document.createElement("div");
+      ending.style.display = "flex";
+      ending.style.flexDirection = "column";
+      ending.style.justifyContent = "center";
+      ending.style.alignItems = "center";
+      ending.style.height = "100vh";
 
-      finalBtn.onclick = () => location.reload();
+      const text = document.createElement("h1");
+      text.textContent = "the dish ran away with the spoon...";
 
-      document.body.appendChild(finalBtn);
+      const restart = document.createElement("button");
+      restart.textContent = "start again";
+      restart.classList.add("magicBtn");
+      restart.onclick = () => location.reload();
+
+      ending.appendChild(text);
+      ending.appendChild(restart);
+      document.body.appendChild(ending);
     }
   }
+
+  // BUTTONS RUN AWAY
+  document.addEventListener("mousemove", (e) => {
+    if (!runawayMode) return;
+
+    document.querySelectorAll(".magicBtn").forEach(btn => {
+      const rect = btn.getBoundingClientRect();
+
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 150) {
+        btn.style.left = rect.left - dx * 0.4 + "px";
+        btn.style.top = rect.top - dy * 0.4 + "px";
+      }
+    });
+  });
+
+  // FLOATING BACKGROUND
+  function floatingBackground() {
+    setInterval(() => {
+      const bubble = document.createElement("div");
+
+      bubble.style.position = "absolute";
+      bubble.style.width = "20px";
+      bubble.style.height = "20px";
+      bubble.style.borderRadius = "50%";
+      bubble.style.background = "rgba(255,255,255,0.4)";
+      bubble.style.left = Math.random() * window.innerWidth + "px";
+      bubble.style.top = window.innerHeight + "px";
+      bubble.style.transition = "transform 4s linear";
+
+      document.body.appendChild(bubble);
+
+      setTimeout(() => {
+        bubble.style.transform = "translateY(-120vh)";
+      }, 50);
+
+      setTimeout(() => bubble.remove(), 4000);
+    }, 800);
+  }
+
+  floatingBackground();
 
 });

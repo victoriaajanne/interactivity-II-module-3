@@ -53,19 +53,51 @@ textarea {
 
 -------------
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: "Playfair Display", serif;
   text-align: center;
-  background-color: #fdf6e3;
+  background: linear-gradient(to bottom, #fff8e7, #fdf6e3);
+  overflow: hidden;
+  transition: background 1s ease, transform 0.5s ease;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-top: 40px;
+  letter-spacing: 2px;
 }
 
 #poem {
-  margin: 20px;
-  font-size: 20px;
+  margin: 30px auto;
+  font-size: 1.5rem;
+  width: 60%;
+  line-height: 1.6;
+}
+
+p {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .magicBtn {
-  margin: 10px;
-  padding: 10px 15px;
+  padding: 12px 18px;
   font-size: 16px;
+  border-radius: 12px;
+  border: none;
+  background: #ffcc70;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.magicBtn:hover {
+  transform: scale(1.1);
 }
