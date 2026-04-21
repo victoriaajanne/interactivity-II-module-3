@@ -1,103 +1,55 @@
-
-.hidden {
-  display: none;
-}
-
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f7f4ef;
+  font-family: sans-serif;
+  background: white;
   overflow: hidden;
 }
 
-h1, p {
-  text-align: center;
-  margin: 0.5rem 0;
+/* CENTER STORY IMAGE */
+#background {
+  width: 55%;
+  height: 60%;
+  margin: 70px auto 0 auto;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  transition: background 0.3s ease;
 }
 
-.container {
-  position: relative;
-  width: 100vw;
-  height: 80vh;
-}
-
-.poem-btn {
-  position: absolute;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 20px;
-  background: #d9c8ff;
-  color: #222;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-#button1 { top: 20vh; left: 20vw; }
-#button2 { top: 32vh; left: 40vw; }
-#button3 { top: 48vh; left: 25vw; }
-
-textarea {
-  position: absolute;
-  top: 62vh;
-  left: 30vw;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #999;
-  resize: none;
-}
-
-.floating {
-  position: fixed;
-  z-index: 10;
-}
-
--------------
-body {
-  margin: 0;
-  font-family: "Playfair Display", serif;
-  text-align: center;
-  background: linear-gradient(to bottom, #fff8e7, #fdf6e3);
-  overflow: hidden;
-  transition: background 1s ease, transform 0.5s ease;
-}
-
-h1 {
-  font-size: 3rem;
-  margin-top: 40px;
-  letter-spacing: 2px;
-}
-
+/* TEXT */
 #poem {
-  margin: 30px auto;
-  font-size: 1.5rem;
-  width: 60%;
-  line-height: 1.6;
+  position: absolute;
+  top: 8%;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
 }
 
-p {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeIn 0.8s forwards;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* BUTTON */
 .magicBtn {
-  padding: 12px 18px;
-  font-size: 16px;
-  border-radius: 12px;
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  padding: 12px;
+  border-radius: 50%;
   border: none;
-  background: #ffcc70;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background: #eee;
 }
 
-.magicBtn:hover {
-  transform: scale(1.1);
+/*  FLOATING EMOJIS */
+.sideEmoji {
+  position: absolute;
+  font-size: 2.5rem;
+  animation: floatUp 2s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-120px); }
 }

@@ -2,175 +2,139 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const poemLines = [
     "Hey diddle diddle,",
-    "The cat and the fiddle,",
-    "The cow jumped over the moon;",
+    "The cat",
+    "And the fiddle,",
+    "The cow jumped over the moon,",
     "The little dog laughed",
-    "To see such sport,",
-    "And the dish ran away with the spoon."
+    "To see such fun,",
+    "The dish ran away with the spoon."
   ];
 
+  const backgrounds = [
+    "images/0.5.png",
+    "images/1.png",
+    "images/2.png",
+    "images/3.png",
+    "images/4.png",
+    "images/5.png",
+    "images/6.png"
+  ];
+
+  const emojis = ["✨","🌟","🎵","📖","🐱","🐶","🎻","🌙"];
+
   let index = 0;
-  let canClick = true;
-  let runawayMode = false;
-  let chaosStarted = [];
+  let started = false;
+  let flashInterval = null;
+  let emojiInterval = null;
 
   const button = document.querySelector(".magicBtn");
+  const poemDiv = document.getElementById("poem");
+  const bg = document.getElementById("background");
 
-  // SOUND
-  const clickSound = new Audio("sound effects/click.mp3");
-  const laughSound = new Audio("sound effects/laugh.mp3");
-  const chaosSound = new Audio("sound effects/glitch.wav");
+  bg.style.backgroundImage = `url(${backgrounds[0]})`;
 
-  button.addEventListener("click", handleClick);
+  button.addEventListener("click", () => {
 
-  function handleClick() {
-    if (!canClick) return;
-
-    canClick = false;
-    setTimeout(() => canClick = true, 600);
-
-    clickSound.currentTime = 0;
-    clickSound.play();
-
-    const poemDiv = document.getElementById("poem");
-
-    if (index < poemLines.length) {
-      const p = document.createElement("p");
-      p.textContent = poemLines[index];
-      poemDiv.appendChild(p);
-
-      triggerChaos(index);
-      index++;
+    //  START
+    if (!started) {
+      started = true;
+      button.textContent = "➡️ Next Page";
+      startEmojiStream();
     }
 
-    duplicateButton();
-  }
+    // RESTART
+    if (index >= poemLines.length) {
+      index = 0;
+      poemDiv.innerHTML = "";
+      bg.style.backgroundImage = `url(${backgrounds[0]})`;
 
-  function duplicateButton() {
-    const existingButtons = document.querySelectorAll(".magicBtn");
-    if (existingButtons.length > 10) return;
+      stopFlash(); // flashing stop here
+      button.textContent = "📖 Click to Start";
 
-    const newBtn = document.createElement("button");
-    newBtn.textContent = "Click me 🐄";
-    newBtn.classList.add("magicBtn");
-
-    newBtn.style.position = "absolute";
-    newBtn.style.top = Math.random() * window.innerHeight + "px";
-    newBtn.style.left = Math.random() * window.innerWidth + "px";
-
-    newBtn.addEventListener("click", handleClick);
-    document.body.appendChild(newBtn);
-  }
-
-  function triggerChaos(stage) {
-    if (chaosStarted.includes(stage)) return;
-    chaosStarted.push(stage);
-
-    if (stage === 1) {
-      document.body.style.fontStyle = "italic";
+      return;
     }
 
-    if (stage === 2) {
-      setInterval(() => {
-        document.querySelectorAll(".magicBtn").forEach(btn => {
-          btn.style.top = Math.random() * window.innerHeight + "px";
-        });
-      }, 1200);
+    const line = poemLines[index].trim();
+
+    // TEXT
+    poemDiv.innerHTML = line;
+
+    // IMAGE
+    bg.style.backgroundImage = `url(${backgrounds[index + 1]})`;
+
+    // HAHA text
+    if (line === "The little dog laughed") {
+      spawnHaha();
     }
 
-    if (stage === 3) {
-      laughSound.loop = true;
-      laughSound.play();
-
-      setInterval(() => {
-        const laugh = document.createElement("p");
-        laugh.textContent = "ha ha ha";
-        laugh.style.position = "absolute";
-        laugh.style.left = Math.random() * window.innerWidth + "px";
-        laugh.style.top = Math.random() * window.innerHeight + "px";
-        document.body.appendChild(laugh);
-      }, 1000);
+    // START FLASH 
+    if (line === "To see such fun,") {
+      startFlash();
     }
 
-    if (stage === 4) {
-      chaosSound.play();
+    index++;
 
-      let hue = 0;
-      setInterval(() => {
-        hue += 10;
-        document.body.style.background = `hsl(${hue}, 80%, 80%)`;
-      }, 500);
+    // FINAL BUTTON 
+    if (index === poemLines.length) {
+      button.textContent = "🔁 Restart";
     }
-
-    if (stage === 5) {
-      runawayMode = true;
-
-      document.body.innerHTML = "";
-
-      const ending = document.createElement("div");
-      ending.style.display = "flex";
-      ending.style.flexDirection = "column";
-      ending.style.justifyContent = "center";
-      ending.style.alignItems = "center";
-      ending.style.height = "100vh";
-
-      const text = document.createElement("h1");
-      text.textContent = "the dish ran away with the spoon...";
-
-      const restart = document.createElement("button");
-      restart.textContent = "start again";
-      restart.classList.add("magicBtn");
-      restart.onclick = () => location.reload();
-
-      ending.appendChild(text);
-      ending.appendChild(restart);
-      document.body.appendChild(ending);
-    }
-  }
-
-  // BUTTONS RUN AWAY
-  document.addEventListener("mousemove", (e) => {
-    if (!runawayMode) return;
-
-    document.querySelectorAll(".magicBtn").forEach(btn => {
-      const rect = btn.getBoundingClientRect();
-
-      const dx = e.clientX - (rect.left + rect.width / 2);
-      const dy = e.clientY - (rect.top + rect.height / 2);
-
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 150) {
-        btn.style.left = rect.left - dx * 0.4 + "px";
-        btn.style.top = rect.top - dy * 0.4 + "px";
-      }
-    });
   });
 
-  // FLOATING BACKGROUND
-  function floatingBackground() {
-    setInterval(() => {
-      const bubble = document.createElement("div");
+  // EMOJI STREAM 
+  function startEmojiStream() {
+    emojiInterval = setInterval(() => {
 
-      bubble.style.position = "absolute";
-      bubble.style.width = "20px";
-      bubble.style.height = "20px";
-      bubble.style.borderRadius = "50%";
-      bubble.style.background = "rgba(255,255,255,0.4)";
-      bubble.style.left = Math.random() * window.innerWidth + "px";
-      bubble.style.top = window.innerHeight + "px";
-      bubble.style.transition = "transform 4s linear";
+      const e = document.createElement("div");
+      e.classList.add("sideEmoji");
 
-      document.body.appendChild(bubble);
+      e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
 
-      setTimeout(() => {
-        bubble.style.transform = "translateY(-120vh)";
-      }, 50);
+      const side = Math.random() > 0.5 ? "left" : "right";
+      e.style[side] = "20px";
+      e.style.top = Math.random() * 80 + "%";
 
-      setTimeout(() => bubble.remove(), 4000);
-    }, 800);
+      document.body.appendChild(e);
+
+      setTimeout(() => e.remove(), 2000);
+
+    }, 350);
   }
 
-  floatingBackground();
+  // HAHA EFFECT
+  function spawnHaha() {
+    const interval = setInterval(() => {
+
+      const h = document.createElement("div");
+      h.classList.add("sideEmoji");
+      h.textContent = "haha 😂";
+
+      h.style.left = Math.random() * window.innerWidth + "px";
+      h.style.top = "60%";
+
+      document.body.appendChild(h);
+
+      setTimeout(() => h.remove(), 2000);
+
+    }, 250);
+
+    setTimeout(() => clearInterval(interval), 2500);
+  }
+
+  // FLASH 
+  function startFlash() {
+    if (flashInterval) return; // prevent stacking
+
+    flashInterval = setInterval(() => {
+      const colors = ["red","yellow","blue","lime","hotpink","orange","cyan","purple"];
+      document.body.style.background =
+        colors[Math.floor(Math.random() * colors.length)];
+    }, 120);
+  }
+
+  function stopFlash() {
+    clearInterval(flashInterval);
+    flashInterval = null;
+    document.body.style.background = "white";
+  }
 
 });
