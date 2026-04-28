@@ -3,28 +3,33 @@ body {
   font-family: sans-serif;
   background: white;
   overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-/* CENTER STORY IMAGE */
+/* CENTERED STORY IMAGE */
 #background {
-  width: 55%;
-  height: 60%;
-  margin: 70px auto 0 auto;
+  width: 60%;
+  height: 65vh;
 
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 
-  transition: background 0.3s ease;
+  transition: background-image 0.3s ease;
 }
 
-/* TEXT */
+/* POEM TEXT ON TOP */
 #poem {
   position: absolute;
   top: 8%;
   width: 100%;
   text-align: center;
   font-size: 2rem;
+  z-index: 2;
 }
 
 /* BUTTON */
@@ -33,15 +38,17 @@ body {
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
+
   font-size: 1.5rem;
   padding: 12px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
   background: #eee;
+  z-index: 3;
 }
 
-/*  FLOATING EMOJIS */
+/* FLOATING EMOJIS */
 .sideEmoji {
   position: absolute;
   font-size: 2.5rem;
@@ -50,6 +57,12 @@ body {
 }
 
 @keyframes floatUp {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-120px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-120px);
+  }
 }

@@ -11,13 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const backgrounds = [
-    "images/0.5.png",
+    "images/0.png",
     "images/1.png",
     "images/2.png",
     "images/3.png",
     "images/4.png",
     "images/5.png",
-    "images/6.png"
+    "images/6.png",
+    "images/7.png"
   ];
 
   const emojis = ["✨","🌟","🎵","📖","🐱","🐶","🎻","🌙"];
@@ -31,63 +32,61 @@ document.addEventListener("DOMContentLoaded", () => {
   const poemDiv = document.getElementById("poem");
   const bg = document.getElementById("background");
 
-  // show first image immediately
-  bg.style.backgroundImage = `url(${backgrounds[0]})`;
+  // initial background (before start)
+  bg.style.backgroundImage = `url("${backgrounds[0]}")`;
 
   button.addEventListener("click", () => {
 
-    // START
+    // FIRST CLICK START
     if (!started) {
       started = true;
       button.textContent = "➡️ Next Page";
       startEmojiStream();
     }
 
-    // RESTART
+    // RESTART CONDITION
     if (index >= poemLines.length) {
       index = 0;
       poemDiv.innerHTML = "";
-      bg.style.backgroundImage = `url(${backgrounds[0]})`;
-
       stopFlash();
+      bg.style.backgroundImage = `url("${backgrounds[0]}")`;
       button.textContent = "📖 Click to Start";
-
+      started = false;
       return;
     }
 
-    const line = poemLines[index].trim();
+    const line = poemLines[index];
 
     // TEXT
     poemDiv.innerHTML = line;
 
-    // IMAGE (FIXED — no +1)
-    bg.style.backgroundImage = `url(${backgrounds[index]})`;
+    // 🖼️ FIXED IMAGE SHIFT (IMPORTANT PART)
+    // first click (index 0) → backgrounds[1]
+    bg.style.backgroundImage = `url("${backgrounds[index + 1]}")`;
 
-    // HAHA EFFECT
+    // EFFECTS
     if (line === "The little dog laughed") {
       spawnHaha();
     }
 
-    // FLASH EFFECT
     if (line === "To see such fun,") {
       startFlash();
     }
 
     index++;
 
-    // FINAL BUTTON
     if (index === poemLines.length) {
       button.textContent = "🔁 Restart";
     }
   });
 
-  // EMOJI STREAM
+  // 🌟 EMOJI STREAM
   function startEmojiStream() {
-    emojiInterval = setInterval(() => {
+    if (emojiInterval) return;
 
+    emojiInterval = setInterval(() => {
       const e = document.createElement("div");
       e.classList.add("sideEmoji");
-
       e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
 
       const side = Math.random() > 0.5 ? "left" : "right";
@@ -95,16 +94,13 @@ document.addEventListener("DOMContentLoaded", () => {
       e.style.top = Math.random() * 80 + "%";
 
       document.body.appendChild(e);
-
       setTimeout(() => e.remove(), 2000);
-
     }, 350);
   }
 
-  // HAHA EFFECT
+  // 😂 HAHA EFFECT
   function spawnHaha() {
     const interval = setInterval(() => {
-
       const h = document.createElement("div");
       h.classList.add("sideEmoji");
       h.textContent = "haha 😂";
@@ -113,22 +109,19 @@ document.addEventListener("DOMContentLoaded", () => {
       h.style.top = "60%";
 
       document.body.appendChild(h);
-
       setTimeout(() => h.remove(), 2000);
-
     }, 250);
 
     setTimeout(() => clearInterval(interval), 2500);
   }
 
-  // FLASH
+  // ⚡ FLASH EFFECT
   function startFlash() {
     if (flashInterval) return;
 
     flashInterval = setInterval(() => {
       const colors = ["red","yellow","blue","lime","hotpink","orange","cyan","purple"];
-      document.body.style.background =
-        colors[Math.floor(Math.random() * colors.length)];
+      document.body.style.background = colors[Math.floor(Math.random() * colors.length)];
     }, 120);
   }
 
