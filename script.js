@@ -31,11 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const poemDiv = document.getElementById("poem");
   const bg = document.getElementById("background");
 
+  // show first image immediately
   bg.style.backgroundImage = `url(${backgrounds[0]})`;
 
   button.addEventListener("click", () => {
 
-    //  START
+    // START
     if (!started) {
       started = true;
       button.textContent = "➡️ Next Page";
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
       poemDiv.innerHTML = "";
       bg.style.backgroundImage = `url(${backgrounds[0]})`;
 
-      stopFlash(); // flashing stop here
+      stopFlash();
       button.textContent = "📖 Click to Start";
 
       return;
@@ -59,28 +60,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // TEXT
     poemDiv.innerHTML = line;
 
-    // IMAGE
-    bg.style.backgroundImage = `url(${backgrounds[index + 1]})`;
+    // IMAGE (FIXED — no +1)
+    bg.style.backgroundImage = `url(${backgrounds[index]})`;
 
-    // HAHA text
+    // HAHA EFFECT
     if (line === "The little dog laughed") {
       spawnHaha();
     }
 
-    // START FLASH 
+    // FLASH EFFECT
     if (line === "To see such fun,") {
       startFlash();
     }
 
     index++;
 
-    // FINAL BUTTON 
+    // FINAL BUTTON
     if (index === poemLines.length) {
       button.textContent = "🔁 Restart";
     }
   });
 
-  // EMOJI STREAM 
+  // EMOJI STREAM
   function startEmojiStream() {
     emojiInterval = setInterval(() => {
 
@@ -120,9 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => clearInterval(interval), 2500);
   }
 
-  // FLASH 
+  // FLASH
   function startFlash() {
-    if (flashInterval) return; // prevent stacking
+    if (flashInterval) return;
 
     flashInterval = setInterval(() => {
       const colors = ["red","yellow","blue","lime","hotpink","orange","cyan","purple"];
